@@ -1,17 +1,24 @@
 
+# Use latest Python image
 FROM python:latest
 
+# Set working directory
 WORKDIR /app
 
-COPY requirements.txt /app/
+# Install system dependencies
+RUN apt update && apt upgrade -y && \
+    apt install -y git python3-pip ffmpeg
 
-RUN apt update && apt upgrade -y
-RUN apt install git python3-pip ffmpeg -y
-
-COPY . .
+# Copy requirements and install them
+COPY requirements.txt .
 
 RUN pip3 install -r requirements.txt
 
-COPY . /app
+# Copy rest of the files
+COPY . .
 
-CMD python3 bot.py
+# Expose port for Render (only needed for webhook servers)
+EXPOSE 8080
+
+# Run the bot
+CMD ["python3", "bot.py"]
