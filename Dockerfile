@@ -18,7 +18,7 @@ RUN pip3 install -r requirements.txt
 COPY . .
 
 # Expose port for Render (only needed for webhook servers)
-PORT 8080
+EXPOSE 8080
 
 # Run the bot
 CMD ["python3", "bot.py"]
