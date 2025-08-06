@@ -79,7 +79,7 @@ async def send_doc(client, message):
     prsize = bot_data['total_size']
     user_deta = find_one(user_id)
     used_date = user_deta.get("date", int(time.time()))
-    buy_date = user_deta["prexdate"]
+    buy_date = user_deta.get("prexdate", 0)
     daily = user_deta["daily"]
     user_type = user_deta["usertype"]
 
