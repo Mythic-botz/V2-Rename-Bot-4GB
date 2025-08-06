@@ -26,7 +26,8 @@ DATABASE_NAME = os.environ.get("DATABASE_NAME", "Renamer")
 # Other Variables Config
 START_PIC = os.environ.get("START_PIC", "https://graph.org/file/ad48ac09b1e6f30d2dae4.jpg")
 
-
+# ports 
+PORT = int(os.environ.get("PORT", 8080))
 
 
 
