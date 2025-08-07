@@ -1,5 +1,5 @@
 pyrogram==2.0.83
-pyromod
+pyromod==3.1.6
 humanize
 pymongo
 Pillow
