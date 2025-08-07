@@ -42,7 +42,7 @@ async def start_all():
         await Client2.stop()
 
 # 🧠 Run the bot
-if name == "main":
+if __name__ == "__main__":
     import asyncio
     asyncio.run(start_all())
 
