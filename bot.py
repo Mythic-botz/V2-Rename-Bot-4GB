@@ -5,16 +5,17 @@ from plugins.cb_data import app as Client2
 from aiohttp import web
 import pyromod
 import pyrogram.utils
+from config import Config
 
 # Patch for small chat/channel IDs
 pyrogram.utils.MIN_CHAT_ID = -999999999999
 pyrogram.utils.MIN_CHANNEL_ID = -100999999999999
 
 # 🔐 Config from env or config.py
-API_ID = int(os.environ.get("API_ID", API_ID))
-API_HASH = os.environ.get("API_HASH", API_HASH)
+API_ID = Config.API_ID
+API_HASH = Config.API_HASH
 BOT_TOKEN = os.environ.get("BOT_TOKEN", BOT_TOKEN)
-WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "https://your-app.onrender.com")
+WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "https://zenitsu-renamer.onrender.com") # Render url 
 PORT = int(os.environ.get("PORT", 10000))
 
 # 🌐 Main Bot
