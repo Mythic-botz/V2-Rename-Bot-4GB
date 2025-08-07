@@ -1,85 +1,76 @@
-import pymongo
 import os
-from helper.date import add_date
+import pymongo
 from config import *
+from helper.date import add_date
+
+# 🌐 Connect to MongoDB using Render environment variable
 mongo = pymongo.MongoClient(DATABASE_URL)
 db = mongo[DATABASE_NAME]
 dbcol = db["user"]
 
-
-
-# Total User
+# 🧮 Total User Count
 def total_user():
-    user = dbcol.count_documents({})
-    return user
+    return dbcol.count_documents({})
 
-
-# Insert Bot Data
+# 📝 Insert Bot Stats
 def botdata(chat_id):
-    bot_id = int(chat_id)
     try:
-        bot_data = {"_id": bot_id, "total_rename": 0, "total_size": 0}
-        dbcol.insert_one(bot_data)
-    except:
+        dbcol.insert_one({"_id": int(chat_id), "total_rename": 0, "total_size": 0})
+    except pymongo.errors.DuplicateKeyError:
         pass
 
-
-# Total Renamed Files
+# 📁 Track Rename Count
 def total_rename(chat_id, renamed_file):
     now = int(renamed_file) + 1
     dbcol.update_one({"_id": chat_id}, {"$set": {"total_rename": str(now)}})
 
-
-# Total Renamed File Size
+# 📦 Track Total Size Renamed
 def total_size(chat_id, total_size, now_file_size):
     now = int(total_size) + now_file_size
     dbcol.update_one({"_id": chat_id}, {"$set": {"total_size": str(now)}})
 
-
-# Insert User Data
+# 👤 Insert New User
 def insert(chat_id):
-    user_id = int(chat_id)
-    user_det = {"_id": user_id, "file_id": None, "caption": None, "daily": 0, "date": 0,
-                "uploadlimit": 5368709120, "used_limit": 0, "usertype": "Free", "prexdate": None,
-                "metadata": False, "metadata_code": "By @Madflix_Bots"}
+    user_det = {
+        "_id": int(chat_id),
+        "file_id": None,
+        "caption": None,
+        "daily": 0,
+        "date": 0,
+        "uploadlimit": 5368709120,  # 5GB
+        "used_limit": 0,
+        "usertype": "Free",
+        "prexdate": None,
+        "metadata": False,
+        "metadata_code": "By @Madflix_Bots"
+    }
     try:
         dbcol.insert_one(user_det)
-    except:
+    except pymongo.errors.DuplicateKeyError:
         return True
-        pass
 
-
-# Add Thumbnail Data
+# 🖼️ Thumbnail Handling
 def addthumb(chat_id, file_id):
     dbcol.update_one({"_id": chat_id}, {"$set": {"file_id": file_id}})
 
 def delthumb(chat_id):
     dbcol.update_one({"_id": chat_id}, {"$set": {"file_id": None}})
 
-
-
-
-# ============= Metadata Function Code =============== #
-
-def setmeta(chat_id, bool_meta):
-    dbcol.update_one({"_id": chat_id}, {"$set": {"metadata": bool_meta}})
-
-def setmetacode(chat_id, metadata_code):
-    dbcol.update_one({"_id": chat_id}, {"$set": {"metadata_code": metadata_code}})
-
-# ============= Metadata Function Code =============== #
-
-
-
-# Add Caption Data
+# 🏷️ Caption Handling
 def addcaption(chat_id, caption):
     dbcol.update_one({"_id": chat_id}, {"$set": {"caption": caption}})
 
 def delcaption(chat_id):
     dbcol.update_one({"_id": chat_id}, {"$set": {"caption": None}})
 
+# 🧠 Metadata Feature
+def setmeta(chat_id, bool_meta):
+    dbcol.update_one({"_id": chat_id}, {"$set": {"metadata": bool_meta}})
 
+def setmetacode(chat_id, metadata_code):
+    dbcol.update_one({"_id": chat_id}, {"$set": {"metadata_code": metadata_code}})
 
+# 🔁 Daily & Limits
 def dateupdate(chat_id, date):
     dbcol.update_one({"_id": chat_id}, {"$set": {"date": date}})
 
@@ -92,8 +83,7 @@ def usertype(chat_id, type):
 def uploadlimit(chat_id, limit):
     dbcol.update_one({"_id": chat_id}, {"$set": {"uploadlimit": limit}})
 
-
-# Add Premium Data
+# ⭐ Premium Users
 def addpre(chat_id):
     date = add_date()
     dbcol.update_one({"_id": chat_id}, {"$set": {"prexdate": date[0]}})
@@ -104,47 +94,30 @@ def addpredata(chat_id):
 def daily(chat_id, date):
     dbcol.update_one({"_id": chat_id}, {"$set": {"daily": date}})
 
+# 🔎 Fetch User Data
 def find(chat_id):
-    id = {"_id": chat_id}
-    x = dbcol.find(id)
-    for i in x:
-        file = i["file_id"]
-        try:
-            caption = i["caption"]
-        except:
-            caption = None
-        try:
-            metadata = i["metadata"]
-        except:
-            metadata = False
-        try:
-            metadata_code = i["metadata_code"]
-        except:
-            metadata_code = None
-            
+    data = dbcol.find_one({"_id": chat_id})
+    if not data:
+        return [None, None, False, None]
+    return [
+        data.get("file_id"),
+        data.get("caption"),
+        data.get("metadata", False),
+        data.get("metadata_code")
+    ]
 
-
-        return [file, caption, metadata, metadata_code]
-
+# 📄 Get All IDs
 def getid():
-    values = []
-    for key in dbcol.find():
-        id = key["_id"]
-        values.append((id))
-    return values
+    return [doc["_id"] for doc in dbcol.find()]
 
+# ❌ Delete User
 def delete(id):
-    dbcol.delete_one(id)
+    dbcol.delete_one({"_id": id})
 
+# 🔍 Find One
 def find_one(id):
     return dbcol.find_one({"_id": id})
 
-
-
-    
-
-# Jishu Developer 
-# Don't Remove Credit 🥺
-# Telegram Channel @Madflix_Bots
-# Back-Up Channel @JishuBotz
-# Developer @JishuDeveloper & @MadflixOfficials
+# Jishu Developer 🚀
+# Don’t Remove Credit 🥺
+# @Madflix_Bots | @JishuBotz | Dev: @JishuDeveloper @MadflixOfficials
