@@ -5,7 +5,7 @@ from plugins.cb_data import app as Client2
 from aiohttp import web
 import pyromod
 import pyrogram.utils
-from config import Config
+from config import *
 
 # Patch for small chat/channel IDs
 pyrogram.utils.MIN_CHAT_ID = -999999999999
