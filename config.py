@@ -31,7 +31,7 @@ PORT = int(os.environ.get("PORT", 8080))
 
 # WEBHOOK 
 WEBHOOK = bool(os.environ.get("WEBHOOK", "True").lower() == "true")
-
+WEBHOOK_URL = os.environ.get("WEBHOOK_URL", f"https://{os.environ.get('RENDER_EXTERNAL_HOSTNAME')}")
 
 
 # If You Need To Add Verify System Then Message Me On Telegram
