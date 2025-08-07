@@ -12,8 +12,8 @@ pyrogram.utils.MIN_CHAT_ID = -999999999999
 pyrogram.utils.MIN_CHANNEL_ID = -100999999999999
 
 # 🔐 Config from env or config.py
-API_ID = Config.API_ID
-API_HASH = Config.API_HASH
+API_ID = config.API_ID
+API_HASH = config.API_HASH
 BOT_TOKEN = os.environ.get("BOT_TOKEN", BOT_TOKEN)
 WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "https://zenitsu-renamer.onrender.com") # 👆 Render url 
 PORT = int(os.environ.get("PORT", 10000))
