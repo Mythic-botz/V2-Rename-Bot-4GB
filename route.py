@@ -1,9 +1,20 @@
-from aiohttp import web
+# route.py
+from fastapi import FastAPI
+from pyrogram import Client
+from config import WEBHOOK_URL, PORT
 
-async def web_server():
-    async def handle(request):
-        return web.Response(text="Bot is running via webhook on Render!", status=200)
+import uvicorn
 
-    app = web.Application()
-    app.router.add_get("/", handle)
-    return app
+app = FastAPI()
+
+@app.get("/")
+def home():
+    return {"status": "OK", "message": "Bot is running"}
+
+def main_route():
+    import threading
+
+    def start_uvicorn():
+        uvicorn.run("route:app", host="0.0.0.0", port=PORT, log_level="info")
+
+    threading.Thread(target=start_uvicorn).start()
