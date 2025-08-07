@@ -15,8 +15,7 @@ pyrogram.utils.MIN_CHANNEL_ID = -100999999999999
 API_ID = Config.API_ID
 API_HASH = Config.API_HASH
 BOT_TOKEN = os.environ.get("BOT_TOKEN", BOT_TOKEN)
-WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "https://zenitsu-renamer.onrender.com") 
-# Render url 
+WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "https://zenitsu-renamer.onrender.com") # 👈 Render url 
 PORT = int(os.environ.get("PORT", 10000))
 
 # 🌐 Main Bot
