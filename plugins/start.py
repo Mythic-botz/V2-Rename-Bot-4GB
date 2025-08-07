@@ -23,7 +23,7 @@ botid = token.split(':')[0]
 async def start(client, message):
     user_id = message.chat.id
     old = insert(int(user_id))
-    
+
     try:
         id = message.text.split(' ')[1]
     except IndexError:
@@ -32,9 +32,9 @@ async def start(client, message):
     loading_sticker_message = await message.reply_sticker("CAACAgIAAxkBAALmzGXSSt3ppnOsSl_spnAP8wHC26jpAAJEGQACCOHZSVKp6_XqghKoHgQ")
     await asyncio.sleep(2)
     await loading_sticker_message.delete()
-    
+
     text = f"""Hello {message.from_user.mention} \n\n➻ This Is An Advanced And Yet Powerful Rename Bot.\n\n➻ Using This Bot You Can Rename And Change Thumbnail Of Your Files.\n\n➻ You Can Also Convert Video To File Aɴᴅ File To Video.\n\n➻ This Bot Also Supports Custom Thumbnail And Custom Caption.\n\n<b>Bot Is Made By @Madflix_Bots</b>"""
-    
+
     button = InlineKeyboardMarkup([
         [InlineKeyboardButton("📢 Updates", url="https://t.me/Madflix_Bots"),
         InlineKeyboardButton("💬 Support", url="https://t.me/MadflixBots_Support")],
@@ -42,7 +42,7 @@ async def start(client, message):
         InlineKeyboardButton("❤️‍🩹 About", callback_data='about')],
         [InlineKeyboardButton("🧑‍💻 Developer 🧑‍💻", url="https://t.me/MadflixOfficials")]
         ])
-    
+
     await message.reply_photo(
         photo=START_PIC,
         caption=text,
@@ -57,7 +57,7 @@ async def start(client, message):
 async def send_doc(client, message):
     user_id = message.chat.id
     old = insert(int(user_id))
-        
+
     user_id = message.from_user.id    
     if FORCE_SUBS:
         try:
@@ -72,14 +72,14 @@ async def send_doc(client, message):
                                          ]))
             await client.send_message(LOG_CHANNEL, f"<b><u>New User Started The Bot</u></b> \n\n<b>User ID :</b> <code>{user_id}</code> \n<b>First Name :</b> {message.from_user.first_name} \n<b>Last Name :</b> {message.from_user.last_name} \n<b>User Name :</b> @{message.from_user.username} \n<b>User Mention :</b> {message.from_user.mention} \n<b>User Link :</b> <a href='tg://openmessage?user_id={user_id}'>Click Here</a> \n<b>User Plan :</b> {user}")
             return
-		
+
     botdata(int(botid))
     bot_data = find_one(int(botid))
     prrename = bot_data['total_rename']
     prsize = bot_data['total_size']
     user_deta = find_one(user_id)
-    used_date = user_deta.get("date", int(time.time()))
-    buy_date = user_deta.get("prexdate", 0)
+    used_date = user_deta["date"]
+    buy_date = user_deta["prexdate"]
     daily = user_deta["daily"]
     user_type = user_deta["usertype"]
 
@@ -118,7 +118,7 @@ async def send_doc(client, message):
             await message.reply_text(f"100% Of Daily {humanbytes(limit)} Data Quota Exhausted.\n\n<b>File Size Detected :</b> {humanbytes(file.file_size)}\n<b>Used Daily Limit :</b> {humanbytes(used)}\n\nYou Have Only <b>{humanbytes(remain)}</b> Left On Your Account.\n\nIf U Want To Rename Large File Upgrade Your Plan", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("💳 Upgrade", callback_data="upgrade")]]))
             return
         if value < file.file_size:
-            
+
             if STRING_SESSION:
                 if buy_date == None:
                     await message.reply_text(f"You Can't Upload More Than 2GB File.\n\nYour Plan Doesn't Allow To Upload Files That Are Larger Than 2GB.\n\nUpgrade Your Plan To Rename Files Larger Than 2GB.", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("💳 Upgrade", callback_data="upgrade")]]))
@@ -143,7 +143,7 @@ async def send_doc(client, message):
                 if pre_check == False:
                     uploadlimit(message.from_user.id, 2147483648)
                     usertype(message.from_user.id, "Free")
-            
+
             filesize = humanize.naturalsize(file.file_size)
             fileid = file.file_id
             total_rename(int(botid), prrename)
@@ -151,6 +151,5 @@ async def send_doc(client, message):
             await message.reply_text(f"""__What Do You Want Me To Do With This File ?__\n\n**File Name :** `{filename}`\n**File Size :** {filesize}\n**DC ID :** {dcid}""", reply_to_message_id=message.id, reply_markup=InlineKeyboardMarkup(
                 [[InlineKeyboardButton("📝 Rename", callback_data="rename"),
                   InlineKeyboardButton("✖️ Cancel", callback_data="cancel")]]))
-              
-              
-              
+
+
