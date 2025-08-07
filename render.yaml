@@ -1,12 +1,12 @@
 services:
   - type: web
-    plan: free
-    name: Rename Bot 2GB
+    name: rename-bot-2gb
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: python bot.py
+    plan: free
     repo: https://github.com/JishuDeveloper/Rename-Bot-4GB
     branch: metadata
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot.py
     autoDeploy: false
     envVars:
       - key: BOT_TOKEN
@@ -28,4 +28,6 @@ services:
       - key: ADMIN
         sync: false
       - key: WEBHOOK
-        sync: false
+        value: True
+      - key: PORT
+        value: 10000
