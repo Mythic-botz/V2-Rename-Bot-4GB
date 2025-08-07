@@ -4,7 +4,7 @@ import pyrogram.utils
 import pyromod
 
 from plugins.cb_data import app as Client2
-from route import main_route  # ✅ Import route.py main function
+from route import web_server  # ✅ Import route.py main function
 
 # ⚙️ Patch minimum chat/channel IDs (rare issue fix)
 pyrogram.utils.MIN_CHAT_ID = -999999999999
