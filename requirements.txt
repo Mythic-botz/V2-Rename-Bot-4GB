@@ -12,3 +12,4 @@ aiohttp
 fastapi
 uvicorn
 gunicorn
+pytz
