@@ -1,20 +1,22 @@
-from flask import Flask, request
+# route.py
+from aiohttp import web
 import asyncio
-import os
-from config import WEBHOOK_PATH  # Import your webhook path from config
+from config import Config
 
-app = Flask(__name__)
+async def handle_webhook(request):
+    try:
+        data = await request.json()
+        headers = {k: v for k, v in request.headers.items()}
+        # process webhook update asynchronously so we can return 200 quickly
+        asyncio.create_task(request.app["bot"].process_webhook_update(data, headers))
+        return web.Response(text="OK")
+    except Exception as e:
+        print(f"[ERROR] Webhook update failed: {e}")
+        return web.Response(status=500, text="Error")
 
-def main_route(bot):
-    @app.route(f"/{WEBHOOK_PATH}", methods=["POST"])
-    def webhook():
-        try:
-            update = request.get_json(force=True)
-            asyncio.create_task(
-                bot.process_webhook_update(update, request.headers)
-            )
-        except Exception as e:
-            print(f"[ERROR] Webhook processing failed: {e}")
-        return "OK", 200
-    port = int(os.environ.get("PORT", 8080))
-    app.run(host="0.0.0.0", port=port)
+async def web_server(bot):
+    app = web.Application()
+    app["bot"] = bot
+    app.router.add_post(f"/{Config.WEBHOOK_PATH}", handle_webhook)
+    app.router.add_get("/", lambda req: web.Response(text="Bot is running!"))
+    return app
