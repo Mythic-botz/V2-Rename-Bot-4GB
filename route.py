@@ -10,13 +10,11 @@ def main_route(bot):
     def webhook():
         try:
             update = request.get_json(force=True)
-            # Pass update & headers to Pyrogram's webhook processor
             asyncio.create_task(
                 bot.process_webhook_update(update, request.headers)
             )
         except Exception as e:
             print(f"[ERROR] Webhook processing failed: {e}")
         return "OK", 200
-
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
