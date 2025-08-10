@@ -1,7 +1,7 @@
 # route.py
 from aiohttp import web
 import asyncio
-from config import Config
+from config import *
 
 async def handle_webhook(request):
     try:
