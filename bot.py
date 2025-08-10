@@ -4,12 +4,13 @@ import pyrogram.utils
 import pyromod
 
 from plugins.cb_data import app as Client2
-from route import main_route, app as flask_app  # Import your Flask/FastAPI app
+from route import main_route  # Import only the route starter
 
 # ⚙️ Patch minimum chat/channel IDs
 pyrogram.utils.MIN_CHAT_ID = -999999999999
 pyrogram.utils.MIN_CHANNEL_ID = -100999999999999
 
+# 📦 Main Pyrogram Bot Client
 bot = Client(
     "Renamer",
     bot_token=BOT_TOKEN,
@@ -18,6 +19,7 @@ bot = Client(
     plugins=dict(root="plugins")
 )
 
+# 📜 Send a startup log to LOG_CHANNEL
 async def startup_log():
     try:
         if LOG_CHANNEL:
@@ -28,22 +30,18 @@ async def startup_log():
     except Exception as e:
         print(f"[ERROR] Couldn't send log message: {e}")
 
+# 🚀 Start bot and web server
 async def start_all():
-    # Start Pyrogram bot
     await bot.start()
     if STRING_SESSION:
         await Client2.start()
 
-    # Set webhook URL
-    webhook_url = f"{BASE_URL}/{WEBHOOK_PATH}"
-    await bot.set_webhook(webhook_url)
-
     await startup_log()
 
-    # Start Flask/FastAPI server (this will keep the process alive)
-    main_route(bot)  # Pass bot to route handler so it can process updates
+    # Start the Flask/FastAPI server (keeps the process alive)
+    main_route(bot)  # Pass the bot so it can handle updates
 
-# 🧠 Run the bot in webhook mode
+# 🧠 Entry point
 if __name__ == "__main__":
     import asyncio
     asyncio.run(start_all())
