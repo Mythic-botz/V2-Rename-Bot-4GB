@@ -33,6 +33,9 @@ PORT = int(os.environ.get("PORT", 8080))
 WEBHOOK = bool(os.environ.get("WEBHOOK", "True").lower() == "true")
 WEBHOOK_URL = os.environ.get("WEBHOOK_URL", f"https://{os.environ.get('RENDER_EXTERNAL_HOSTNAME')}")
 
+BASE_URL = os.environ.get("BASE_URL", "https://zenitsu-rename-bot-4gb.onrender.com")  # Replace with your Render service URL
+WEBHOOK_PATH = os.environ.get("WEBHOOK_PATH", "WebhookMythicBots")  # Can be anything unique
+
 
 # If You Need To Add Verify System Then Message Me On Telegram
 # Check Demo Bots
