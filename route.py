@@ -1,20 +1,14 @@
-# route.py
-from fastapi import FastAPI
-from pyrogram import Client
-from config import WEBHOOK_URL, PORT
+from flask import Flask, request
+import asyncio
 
-import uvicorn
+app = Flask(__name__)
 
-app = FastAPI()
+def main_route(bot):
+    @app.route(f"/{WEBHOOK_PATH}", methods=["POST"])
+    def webhook():
+        update = request.get_json(force=True)
+        asyncio.create_task(bot.process_webhook_update(update))
+        return "OK", 200
 
-@app.get("/")
-def home():
-    return {"status": "OK", "message": "Bot is running"}
-
-def main_route():
-    import threading
-
-    def start_uvicorn():
-        uvicorn.run("route:app", host="0.0.0.0", port=PORT, log_level="info")
-
-    threading.Thread(target=start_uvicorn).start()
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
