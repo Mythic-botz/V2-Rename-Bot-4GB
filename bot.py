@@ -71,7 +71,6 @@ class Bot(Client):
         # If webhook mode is enabled, set webhook here
         if WEBHOOK:
             webhook_url = f"{BASE_URL}/{WEBHOOK_PATH}"
-            await self.set_webhook(webhook_url)
             print(f"✅ Webhook set to {webhook_url}")
 
     async def stop(self, *args):
